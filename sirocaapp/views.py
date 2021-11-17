@@ -28,7 +28,7 @@ def get_pull_count(url):
             return count // 30
         else:
             return 1
-    except:
+    except AttributeError:
         return 0
 
 
@@ -62,15 +62,15 @@ def make_request(request):
         pulls = UserRequestResult.objects.filter(url=user_request)
         return render(request, 'sirocaapp/index.html', context={'pulls': pulls})
 
-    except:
+    except UserRequest.DoesNotExist:
 
         if form.is_valid():
             url = form.cleaned_data['url']
             count = get_pull_count(url)
-            print(count)
+            print(count+1)
 
-            # asyncio.run(create_tasks(url, count))
-
+            asyncio.run(create_tasks(url, count))
+            print(data)
             if type(data) is dict:
                 return render(request, 'sirocaapp/index.html', context={'empty': data["message"]})
 
