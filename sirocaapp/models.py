@@ -7,6 +7,9 @@ class UserRequest(models.Model):
     def __str__(self):
         return '{}'.format(self.url)
 
+    class Meta:
+        db_table = "UserRequest"
+
 
 class UserRequestResult(models.Model):
     url = models.ForeignKey(UserRequest, on_delete=models.CASCADE)
@@ -14,3 +17,6 @@ class UserRequestResult(models.Model):
     reviewers_name = models.CharField(max_length=150, db_index=True)
     assignees_name = models.CharField(max_length=150, db_index=True)
     pull_url = models.CharField(max_length=150, db_index=True)
+
+    class Meta:
+        db_table = "UserRequestResult"
