@@ -13,5 +13,3 @@ def get_data(url):
     user_project = split_url[3] + '/' + split_url[4] + '/pulls'
     r = requests.get(git_api+user_project)
     return r.json()
-
-
