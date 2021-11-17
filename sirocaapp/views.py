@@ -8,6 +8,8 @@ import aiohttp
 
 
 git_api = 'https://api.github.com/repos/'
+user_agency = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.131 Safari/537.36 OPR/78.0.4093.147'
+
 data = []
 
 
@@ -16,8 +18,9 @@ def get_index(request):
 
 
 def get_pull_count(url):
+    header = {'User-Agent': user_agency}
     try:
-        r = requests.get(url)
+        r = requests.get(url, headers=header)
         soup = bs(r.text, 'lxml')
         count = int(soup.find('div', class_='pt-3 hide-full-screen mb-5').find('a', id='pull-requests-tab').find('span',
                                                                                                   class_='Counter').text)
