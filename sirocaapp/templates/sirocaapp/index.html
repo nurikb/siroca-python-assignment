@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Simple login form</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+#myInput {
+  background-position: 10px 10px;
+  background-repeat: no-repeat;
+  width: 100%;
+  font-size: 16px;
+  padding: 12px 20px 12px 40px;
+  border: 1px solid #ddd;
+  margin-bottom: 12px;
+}
+
+#myTable {
+  border-collapse: collapse;
+  width: 100%;
+  border: 1px solid #ddd;
+  font-size: 18px;
+}
+
+#myTable th, #myTable td {
+  text-align: left;
+  padding: 12px;
+}
+
+#myTable tr {
+  border-bottom: 1px solid #ddd;
+}
+
+#myTable tr.header, #myTable tr:hover {
+  background-color: #f1f1f1;
+}
+</style>
+  </head>
+  <body>
+    <form action="{% url 'git_url'%}" method="POST">
+      {% csrf_token %}
+      <div class="container">
+        <h1>вставьте ссылку</h1>
+        <input type="text" name="url" id="myInput" placeholder="Search for names..">
+
+      <button type="submit">Search</button>
+    </form>
+
+    {% if form.errors %}
+      <div class="alert alert-danger">
+        {{ form.errors }}
+      </div>
+    {% endif %}
+
+    {% if pulls %}
+    <table id="myTable">
+      <tr class="header">
+        <th>Pull Request</th>
+        <th>Pull Request Reviewers</th>
+        <th>Pull Request Assignees</th>
+        <th>Links</th>
+      </tr>
+            {% for pull in pulls %}
+      <tr>
+        <td>{{ pull.pull_name }}</td>
+        <td>{{ pull.reviewers_name }}</td>
+        <td>{{ pull.assignees_name }}</td>
+        <td><a href="{{ pull.pull_url }}">{{ pull.pull_url }}</a></td>
+      </tr>
+            {% endfor %}
+    </table>
+      {% endif %}
+      {% if empty %}
+      <h3>{{ empty }}</h3>
+      {% endif %}
+  </body>
+</html>
