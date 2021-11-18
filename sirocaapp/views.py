@@ -22,7 +22,6 @@ def get_pull_count(url):
     #   the count is divided by 30 since there are 30 pull requests in one response
     header = {'User-Agent': user_agency}
     r = requests.get(url, headers=header)
-
     if r.status_code != 200:
         return 0
 
