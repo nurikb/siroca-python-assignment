@@ -21,19 +21,22 @@ def get_pull_count(url):
     #   get the number of pull requests
     #   the count is divided by 30 since there are 30 pull requests in one response
     header = {'User-Agent': user_agency}
-    try:
-        r = requests.get(url, headers=header)
-        soup = bs(r.text, 'lxml')
-        count = int(soup.find('div', class_='pt-3 hide-full-screen mb-5').find('a', id='pull-requests-tab').find('span',
-                                                                                                 class_='Counter').text)
-        if count == 0:
-            return 0
-        elif count > 30 and count > 0:
-            return count // 30
-        else:
-            return 1
-    except AttributeError:
+    r = requests.get(url, headers=header)
+
+    if r.status_code != 200:
         return 0
+
+    soup = bs(r.text, 'lxml')
+    count = int(soup.find('div', class_='pt-3 hide-full-screen mb-5').find('a', id='pull-requests-tab').find('span',
+                                                                                             class_='Counter').text)
+    if count == 0:
+        return 0
+
+    elif count > 30:
+        return count // 30
+
+    else:
+        return 1
 
 
 async def get_data(session, url, page):
@@ -71,7 +74,6 @@ def make_request(request):
         if form.is_valid():
             url = form.cleaned_data['url']
             count = get_pull_count(url)
-            print(count)
             if count == 0:
                 empty = 'There are not pull requests'
                 return render(request, 'sirocaapp/index.html', context={'empty': empty})
